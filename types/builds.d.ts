@@ -10,6 +10,4 @@ export interface IConfig {
   alias?: {[index: string]: string}
 }
   
-export interface IBuilds {
-  [index: string]: IConfig
-}
+export type IBuilds = Record<string, IConfig>

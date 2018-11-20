@@ -1,9 +1,11 @@
-import typescript from 'rollup-plugin-typescript'
-import resolve from 'rollup-plugin-node-resolve'
-import cjs from 'rollup-plugin-commonjs'
-import replace 'rollup-plugin-replace'
-import alias from 'rollup-plugin-alias'
-import { IBuilds } from '../types/builds'
+const typescript = require('rollup-plugin-typescript')
+const node = require('rollup-plugin-node-resolve')
+const cjs = require('rollup-plugin-commonjs')
+const replace = require('rollup-plugin-replace')
+const alias = require('rollup-plugin-alias')
+const { IBuilds } = require('../types/builds.d.ts')
+
+const version = process.env.VERSION || require('../package.json').version
 
 const banner =
   '/*!\n' +
@@ -61,14 +63,14 @@ const builds: IBuilds = {
     env: 'production',
     banner,
   },
-  'web-runtime-dev': {
+  'web-full-dev': {
     entry: resolve('web/entry-runtime-with-compiler.js'),
     dest: resolve('dist/vue.js'),
     format: 'umd',
     env: 'development',
     banner,
   },
-  'web-runtime-dev': {
+  'web-full-prod': {
     entry: resolve('web/entry-runtime-with-compiler.js'),
     dest: resolve('dist/vue.min.js'),
     format: 'umd',
@@ -96,7 +98,8 @@ function genConfig(name: string) {
 
   if (opts.env) {
     config.plugins.push(replace({
-      'process.env.NODE_ENV': opts.env
+      'process.env.NODE_ENV': opts.env,
+      '__VERSION__': version
     }))
   }
 
